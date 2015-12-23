@@ -4,34 +4,36 @@ import java.net.Socket;
 
 
 public class ServerDigitron {
-	static ServerNit klijenti[] = new ServerNit[10];
 	
 	public static void main(String[] args) {
 		
-		int port = 2555;
+		int port = 1908;
 		
 		if(args.length>0){
 			port = Integer.parseInt(args[0]);
 		}
 		
+		int portPodaci = 15813;
+		if(args.length>0){
+			portPodaci = Integer.parseInt(args[0]);
+		}
 		Socket klijentSoket = null;
 		try {
 			
 			ServerSocket serverSoket = new ServerSocket(port);
-			
+			ServerSocket serverSoketPodaci = new ServerSocket (portPodaci);
 			while(true){
 				
 				klijentSoket = serverSoket.accept();
-				for (int i = 0; i < klijenti.length; i++) {
-					if (klijenti[i]==null) {
-						klijenti[i]= new ServerNit(klijentSoket,klijenti);
-						klijenti[i].start();
-						break;
-					}
-				}
+				
+				ServerNit nit = new ServerNit(klijentSoket,serverSoketPodaci);
+				nit.start();
+				
 			}
 		} catch (IOException e) {
 			System.out.println(e);
 		}
+		
+		
 	}
 }
